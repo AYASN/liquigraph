@@ -20,6 +20,7 @@ import org.liquigraph.core.model.Changeset;
 import org.liquigraph.extensions.jdbc.GraphDatabaseServiceConnection;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.procedure.Context;
+import org.neo4j.procedure.Name;
 import org.neo4j.procedure.Procedure;
 
 import java.sql.Connection;
@@ -41,5 +42,11 @@ public class LiquigraphExtensions {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Procedure("liquigraph.diffChangelog")
+    public Stream<ChangesetRecord> diffChangelog(@Name("uri") String changelogUri) {
+        // to implement
+        return null;
     }
 }

@@ -57,6 +57,23 @@ public class LiquigraphExtensionsTest {
         }
     }
 
+    @Test
+    public void returns_diff_changelog_nodes() {
+        runMigrations("changelog/changelog.xml");
+        Map<String, Object> expectedRow = new HashMap<>();
+        expectedRow.put("id", "second-changelog");
+        expectedRow.put("author", "fbiville");
+        expectedRow.put("queries", singletonList("MATCH (n) RETURN n"));
+
+        GraphDatabaseService graphDb = neo4jRule.getGraphDatabaseService();
+        try (Transaction transaction = graphDb.beginTx();
+             Result result = graphDb.execute("CALL liquigraph.diffChangelog(\"changelog/changelog.xml\")")) {
+
+            assertThat(result).containsExactly(expectedRow);
+            transaction.failure();
+        }
+    }
+
     private void runMigrations(String masterChangelog) {
         new Liquigraph().runMigrations(new ConfigurationBuilder()
           .withUri(jdbcUri())
